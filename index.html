@@ -794,7 +794,11 @@ const FIREBASE_CONFIG = {
   appId: "1:87324612447:web:e47ec8e6a198335f7e08ea"
 };
 
-c   const ADMIN_EMAILS = ["navidsebastiantg@gmail.com", "correo2@gmail.com", "correo3@gmail.com"]; // <-- el mismo correo del paso 4 y 7
+// Puedes poner uno o varios correos de admin, entre comillas y separados por coma.
+// Cada uno debe existir en Firebase > Authentication > Users y estar tambien en las reglas de Firestore.
+const ADMIN_EMAILS = ["navidsebastiantg@gmail.com"];
+const ADMIN_EMAIL = ADMIN_EMAILS[0];
+const isAdminEmail = e => !!e && ADMIN_EMAILS.some(a => a.trim().toLowerCase() === String(e).trim().toLowerCase());
 
 const ADMIN_PASSWORD = "seyla-2026"; // solo se usa si NO configuras Firebase (modo local de prueba)
 
@@ -821,7 +825,7 @@ let firebaseReady = false;
 let adminEmailConfigured = false;
 try{
   const configured = FIREBASE_CONFIG.apiKey && FIREBASE_CONFIG.apiKey.indexOf('PON_TU') === -1;
-  adminEmailConfigured = ADMIN_EMAIL && ADMIN_EMAIL.indexOf('PON_TU') === -1;
+  adminEmailConfigured = ADMIN_EMAILS.some(e => e && e.indexOf('PON_TU') === -1);
   if(configured && window.firebase){
     firebase.initializeApp(FIREBASE_CONFIG);
     fdb = firebase.firestore();
@@ -1029,7 +1033,7 @@ async function doLogin(){
 }
 if(firebaseReady && fauth){
   fauth.onAuthStateChanged(user=>{
-    isAdmin = !!user && adminEmailConfigured && user.email === ADMIN_EMAIL;
+    isAdmin = !!user && adminEmailConfigured && isAdminEmail(user.email);
     refreshAdminUI();
   });
 }
@@ -1249,7 +1253,7 @@ document.querySelectorAll('.modal-backdrop').forEach(m=>{
    ===================================================================== */
 /* ---- clave para los avisos (paso 9 del LEEME). Si no la pones, los avisos
         solo funcionan mientras la pagina esta abierta. ---- */
-const VAPID_KEY = "BOYjUUuKB9J3skRMJhjNfc9z7tx2y9-b8TdedMNxkKu6Aokf1CnsesqCnRVL_4caUJbfhVzwgmi0t1iShaLRgbU";
+const VAPID_KEY = "PON_TU_VAPID_KEY";
 
 (function(){
   'use strict';
