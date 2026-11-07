@@ -7,7 +7,7 @@ service cloud.firestore {
       allow read: if col in ['videos','fanposts','characters'];
       allow write: if col in ['videos','fanposts','characters']
                    && request.auth != null
-                   && request.auth.token.email in ["correo1@gmail.com", "correo2@gmail.com"];
+                   && request.auth.token.email in ["navidsebastiantg@gmail.com", "correo2@gmail.com"];
     }
 
     // Los visitantes pueden registrar su navegador para recibir avisos, pero nadie puede leer la lista.
