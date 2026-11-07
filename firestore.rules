@@ -1,0 +1,19 @@
+rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+
+    // Todos pueden VER videos, fan art y fichas. Solo tu cuenta de admin puede publicar o editar.
+    match /{col}/{doc} {
+      allow read: if col in ['videos','fanposts','characters'];
+      allow write: if col in ['videos','fanposts','characters']
+                   && request.auth != null
+                   && request.auth.token.email == "ADMIN_EMAIL_AQUI";
+    }
+
+    // Los visitantes pueden registrar su navegador para recibir avisos, pero nadie puede leer la lista.
+    match /tokens/{token} {
+      allow create, delete: if true;
+      allow read, update: if false;
+    }
+  }
+}
